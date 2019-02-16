@@ -5,20 +5,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by vanessa on 16/02/2019.
  */
 
 public class RecipeActivity  extends AppCompatActivity {
-    ImageView mFlower;
-    TextView mDescription;
+    @BindView((R.id.ivImage)) ImageView mFlower;
+    @BindView((R.id.tvDescription)) TextView mDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recipe_detail);
-        mFlower = findViewById(R.id.ivImage);
-        mDescription = findViewById(R.id.tvDescription);
+        ButterKnife.bind(this);
 
         Bundle mBundle = getIntent().getExtras();
         if (mBundle != null) {
