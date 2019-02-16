@@ -1,12 +1,26 @@
 package com.example.android.bakingapp;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.example.android.bakingapp.json.JsonRecipeUtils;
 import com.example.android.bakingapp.model.Recipe;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +31,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.recyclerview) RecyclerView mRecyclerView;
-    List<Recipe> mRecipeList;
+    Recipe[] mRecipeTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,19 +40,14 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        Recipe[] recipeTab = JsonRecipeUtils.getRecipesFromJsonWithGson(this);
+        mRecipeTab = JsonRecipeUtils.getRecipesFromJsonWithGson(this);
 
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, 1);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
-        mRecipeList = new ArrayList<>();
-        mRecipeList.add(new Recipe(1, "Recette 1", R.drawable.image1));
-        mRecipeList.add(new Recipe(1, "Recette 2", R.drawable.image1));
-        mRecipeList.add(new Recipe(1, "Recette 3", R.drawable.image1));
-        mRecipeList.add(new Recipe(1, "Recette 4", R.drawable.image1));
-
-        RecipeListAdapter myAdapter = new RecipeListAdapter(MainActivity.this, mRecipeList);
+        RecipeListAdapter myAdapter = new RecipeListAdapter(MainActivity.this, mRecipeTab);
         mRecyclerView.setAdapter(myAdapter);
 
     }
+
 }

@@ -21,10 +21,10 @@ import java.util.List;
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListViewHolder>{
 
     private Context mContext;
-    private List<Recipe> mRecipeList;
+    private Recipe[] mRecipeList;
 
 
-    RecipeListAdapter(Context context, List<Recipe> recipeList) {
+    RecipeListAdapter(Context context, Recipe[] recipeList) {
         mContext = context;
         mRecipeList = recipeList;
     }
@@ -37,15 +37,16 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListViewHolder
 
     @Override
     public void onBindViewHolder(final RecipeListViewHolder holder, int position) {
-        holder.mImage.setImageResource(mRecipeList.get(position).getImageTest());
-        holder.mTitle.setText(mRecipeList.get(position).getName());
+        holder.mImage.setImageResource(mRecipeList[position].getImageTest());
+        holder.mTitle.setText(mRecipeList[position].getName());
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent mIntent = new Intent(mContext, RecipeActivity.class);
-                mIntent.putExtra("Name", mRecipeList.get(holder.getAdapterPosition()).getName());
-                mIntent.putExtra("Id", mRecipeList.get(holder.getAdapterPosition()).getId());
-                mIntent.putExtra("Image", mRecipeList.get(holder.getAdapterPosition()).getImage());
+                mIntent.putExtra("Name", mRecipeList[holder.getAdapterPosition()].getName());
+                mIntent.putExtra("Id", mRecipeList[holder.getAdapterPosition()].getId());
+                //mIntent.putExtra("Image", mRecipeList[holder.getAdapterPosition()].getImage());
+                mIntent.putExtra("Image", mRecipeList[holder.getAdapterPosition()].getImage());
                 mContext.startActivity(mIntent);
             }
         });
@@ -53,7 +54,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListViewHolder
 
     @Override
     public int getItemCount() {
-        return mRecipeList.size();
+        return mRecipeList.length;
     }
 }
 

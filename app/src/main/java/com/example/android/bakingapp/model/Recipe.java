@@ -83,7 +83,7 @@ public class Recipe {
     }
 
     public int getImageTest() {
-        return imageTest;
+        return R.drawable.image1;
     }
 
     public void setImageTest(int imageTest) {
