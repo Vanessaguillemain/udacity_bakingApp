@@ -16,21 +16,25 @@ public class Recipe {
     private ArrayList<RecipeIngredient> recipeIngredients;
     @SerializedName("steps")
     private ArrayList<RecipeStep> recipeSteps;
-    private String serving;
+    private int servings;
     private String image;
     private int imageTest;
+
+    public Recipe() {
+        new Recipe(0,"", null, null, 0, "");
+    }
 
     public Recipe(int id, String name, int imageTest) {
         this.id = id;
         this.name = name;
         this.imageTest = imageTest;
     }
-    public Recipe(int id, String name, ArrayList<RecipeIngredient> recipeIngredients, ArrayList<RecipeStep> recipeSteps, String serving, String image) {
+    public Recipe(int id, String name, ArrayList<RecipeIngredient> recipeIngredients, ArrayList<RecipeStep> recipeSteps, int servings, String image) {
         this.id = id;
         this.name = name;
         this.recipeIngredients = recipeIngredients;
         this.recipeSteps = recipeSteps;
-        this.serving = serving;
+        this.servings = servings;
         this.image = image;
     }
 
@@ -74,12 +78,12 @@ public class Recipe {
         this.recipeSteps = recipeSteps;
     }
 
-    public String getServing() {
-        return serving;
+    public int getServings() {
+        return servings;
     }
 
-    public void setServing(String serving) {
-        this.serving = serving;
+    public void setServings(int servings) {
+        this.servings = servings;
     }
 
     public int getImageTest() {
@@ -90,7 +94,6 @@ public class Recipe {
         this.imageTest = imageTest;
     }
 
-
     @Override
     public String toString() {
         return "Recipe{" +
@@ -98,7 +101,7 @@ public class Recipe {
                 ", name='" + name + '\'' +
                 ", recipeIngredients=" + recipeIngredients +
                 ", recipeSteps=" + recipeSteps +
-                ", serving='" + serving + '\'' +
+                ", servings='" + servings + '\'' +
                 ", image='" + image + '\'' +
                 '}';
     }

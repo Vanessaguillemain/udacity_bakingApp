@@ -11,8 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.model.Recipe;
+import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import butterknife.BindView;
 
 /**
  * Created by vanessa on 16/02/2019.
@@ -22,7 +23,6 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListViewHolder
 
     private Context mContext;
     private Recipe[] mRecipeList;
-
 
     RecipeListAdapter(Context context, Recipe[] recipeList) {
         mContext = context;
@@ -37,15 +37,23 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListViewHolder
 
     @Override
     public void onBindViewHolder(final RecipeListViewHolder holder, int position) {
-        holder.mImage.setImageResource(mRecipeList[position].getImageTest());
-        holder.mTitle.setText(mRecipeList[position].getName());
+        Recipe currentRecipe = mRecipeList[position];
+        String urlImage = currentRecipe.getImage();
+
+        if(urlImage.isEmpty()) {
+            holder.mImage.setImageResource(mRecipeList[position].getImageTest());
+        } else {
+            Picasso.with(mContext).load(urlImage).into(holder.mImage);
+        }
+
+        holder.mTitle.setText(currentRecipe.getName());
+
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent mIntent = new Intent(mContext, RecipeActivity.class);
                 mIntent.putExtra("Name", mRecipeList[holder.getAdapterPosition()].getName());
                 mIntent.putExtra("Id", mRecipeList[holder.getAdapterPosition()].getId());
-                //mIntent.putExtra("Image", mRecipeList[holder.getAdapterPosition()].getImage());
                 mIntent.putExtra("Image", mRecipeList[holder.getAdapterPosition()].getImage());
                 mContext.startActivity(mIntent);
             }
