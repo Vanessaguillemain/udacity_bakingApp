@@ -1,10 +1,13 @@
 package com.example.android.bakingapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by vanessa on 16/02/2019.
  */
 
-public class RecipeIngredient {
+public class RecipeIngredient implements Parcelable {
 
     private double quantity;
     private String measure;
@@ -14,6 +17,31 @@ public class RecipeIngredient {
         this.quantity = quantity;
         this.measure = measure;
         this.ingredient = ingredient;
+    }
+
+    private RecipeIngredient(Parcel in) {
+        quantity = in.readDouble();
+        measure = in.readString();
+        ingredient = in.readString();
+    }
+
+    public static final Creator<RecipeIngredient> CREATOR = new Creator<RecipeIngredient>() {
+        @Override
+        public RecipeIngredient createFromParcel(Parcel in) {
+            return new RecipeIngredient(in);
+        }
+
+        @Override
+        public RecipeIngredient[] newArray(int size) {
+            return new RecipeIngredient[size];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeDouble(quantity);
+        out.writeString(measure);
+        out.writeString(ingredient);
     }
 
     public double getQuantity() {
@@ -48,4 +76,11 @@ public class RecipeIngredient {
                 ", ingredient='" + ingredient + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
 }

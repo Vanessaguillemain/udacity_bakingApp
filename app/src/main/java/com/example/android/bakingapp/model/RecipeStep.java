@@ -1,10 +1,13 @@
 package com.example.android.bakingapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by vanessa on 16/02/2019.
  */
 
-public class RecipeStep {
+public class RecipeStep implements Parcelable{
 
     private int id;
     private String shortDescription;
@@ -18,6 +21,35 @@ public class RecipeStep {
         this.description = description;
         this.videoURL = videoURL;
         this.thumbnailURL = thumbnailURL;
+    }
+
+    private RecipeStep(Parcel in) {
+        id = in.readInt();
+        shortDescription = in.readString();
+        description = in.readString();
+        videoURL = in.readString();
+        thumbnailURL = in.readString();
+    }
+
+    public static final Creator<RecipeStep> CREATOR = new Creator<RecipeStep>() {
+        @Override
+        public RecipeStep createFromParcel(Parcel in) {
+            return new RecipeStep(in);
+        }
+
+        @Override
+        public RecipeStep[] newArray(int size) {
+            return new RecipeStep[size];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(id);
+        out.writeString(shortDescription);
+        out.writeString(description);
+        out.writeString(videoURL);
+        out.writeString(thumbnailURL);
     }
 
     public int getId() {
@@ -70,4 +102,10 @@ public class RecipeStep {
                 ", thumbnailURL='" + thumbnailURL + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
 }

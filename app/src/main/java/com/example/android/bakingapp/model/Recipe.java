@@ -1,5 +1,8 @@
 package com.example.android.bakingapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.android.bakingapp.R;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +12,7 @@ import java.util.ArrayList;
  * Created by vanessa on 16/02/2019.
  */
 
-public class Recipe {
+public class Recipe implements Parcelable{
     private int id;
     private String name;
     @SerializedName("ingredients")
@@ -36,6 +39,36 @@ public class Recipe {
         this.recipeSteps = recipeSteps;
         this.servings = servings;
         this.image = image;
+    }
+    private Recipe(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        servings = in.readInt();
+        image = in.readString();
+        recipeIngredients = in.readArrayList(RecipeIngredient.class.getClassLoader());
+        recipeSteps = in.readArrayList(RecipeStep.class.getClassLoader());
+    }
+
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(id);
+        out.writeString(name);
+        out.writeInt(servings);
+        out.writeString(image);
+        out.writeList(recipeIngredients);
+        out.writeList(recipeSteps);
     }
 
     public int getId() {
@@ -105,4 +138,10 @@ public class Recipe {
                 ", image='" + image + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
 }
