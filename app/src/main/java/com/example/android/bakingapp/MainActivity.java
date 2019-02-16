@@ -1,11 +1,11 @@
 package com.example.android.bakingapp;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
 
+import com.example.android.bakingapp.json.JsonRecipeUtils;
 import com.example.android.bakingapp.model.Recipe;
 
 import java.util.ArrayList;
@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        Recipe[] recipeTab = JsonRecipeUtils.getRecipesFromJsonWithGson(this);
 
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
