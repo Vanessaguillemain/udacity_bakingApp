@@ -36,6 +36,7 @@ public class RecipeActivity  extends AppCompatActivity {
         if (recipe != null) {
             mFlower.setImageResource(recipe.getImageTest());
             mDescription.setText(recipe.getName());
+            this.setTitle(recipe.getName());
         }
     }
 

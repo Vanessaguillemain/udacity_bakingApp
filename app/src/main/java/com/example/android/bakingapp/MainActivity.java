@@ -29,8 +29,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+        String s = getResources().getString(R.string.nb_span);
+        Integer span = Integer.parseInt(s);
 
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, 1);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, span);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 
         RecipeListAdapter myAdapter = new RecipeListAdapter(MainActivity.this, mRecipeTab);
