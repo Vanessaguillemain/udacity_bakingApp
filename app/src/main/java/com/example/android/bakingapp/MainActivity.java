@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         mRecipeList.add(new Recipe(1, "Recette 3", R.drawable.image1));
         mRecipeList.add(new Recipe(1, "Recette 4", R.drawable.image1));
 
-        RecipeAdapter myAdapter = new RecipeAdapter(MainActivity.this, mRecipeList);
+        RecipeListAdapter myAdapter = new RecipeListAdapter(MainActivity.this, mRecipeList);
         mRecyclerView.setAdapter(myAdapter);
 
     }
