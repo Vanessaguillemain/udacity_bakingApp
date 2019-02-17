@@ -4,9 +4,15 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.android.bakingapp.model.RecipeStep;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,14 +23,15 @@ public class MasterListAdapter extends BaseAdapter {
     // Keeps track of the context and list of images to display
     private Context mContext;
     private List<Integer> mImageIds;
+    private List<RecipeStep> mRecipeSteps;
 
     /**
      * Constructor method
      * @param imageIds The list of images to display
      */
-    public MasterListAdapter(Context context, List<Integer> imageIds) {
+    public MasterListAdapter(Context context, List<RecipeStep> steps) {
         mContext = context;
-        mImageIds = imageIds;
+        mRecipeSteps = steps;
     }
 
     /**
@@ -32,7 +39,7 @@ public class MasterListAdapter extends BaseAdapter {
      */
     @Override
     public int getCount() {
-        return mImageIds.size();
+        return mRecipeSteps.size();
     }
 
     @Override
@@ -49,7 +56,7 @@ public class MasterListAdapter extends BaseAdapter {
      * Creates a new ImageView for each item referenced by the adapter
      */
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
+       /* ImageView imageView;
         if (convertView == null) {
             // If the view is not recycled, this creates a new ImageView to hold an image
             imageView = new ImageView(mContext);
@@ -63,7 +70,33 @@ public class MasterListAdapter extends BaseAdapter {
 
         // Set the image resource and return the newly created ImageView
         imageView.setImageResource(mImageIds.get(position));
-        return imageView;
+        return imageView;*/
+
+
+        TextView textViewStep;
+
+        if (convertView == null) {
+            textViewStep = new TextView(mContext);
+
+        } else {
+            textViewStep = (TextView) convertView;
+        }
+        String s = mRecipeSteps.get(position).getShortDescription();
+        textViewStep.setText(s);
+        textViewStep.setBackgroundResource(R.drawable.back);
+
+        textViewStep.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Toast.makeText(v.getContext(), "Text #" + (position), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return textViewStep;
+
     }
+
 
 }

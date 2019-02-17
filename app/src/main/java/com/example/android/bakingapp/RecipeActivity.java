@@ -29,6 +29,7 @@ public class RecipeActivity  extends AppCompatActivity {
         }
 
         Recipe recipe = getIntent().getExtras().getParcelable("recipe");
+        this.setTitle(recipe.getName());
 
         // Create a new head BodyPartFragment
         ElementsRecipeFragment listFragment = new ElementsRecipeFragment();

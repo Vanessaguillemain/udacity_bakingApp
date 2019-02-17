@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.model.Recipe;
@@ -36,20 +37,25 @@ public class ElementsRecipeFragment extends Fragment {
         // Inflate the Android-Me fragment layout
         View rootView = inflater.inflate(R.layout.fragment_list_elements, container, false);
 
-        // Get a reference to the ImageView in the fragment layout
         TextView textViewIngr = (TextView) rootView.findViewById(R.id.tvIngredients);
-        TextView textViewDesc = (TextView) rootView.findViewById(R.id.tvDescription);
+        //TextView textViewDesc = (TextView) rootView.findViewById(R.id.tvDescription);
+        // Get a reference to the GridView in the fragment_master_list xml layout file
+        GridView gridView = (GridView) rootView.findViewById(R.id.steps_grid_view);
 
         if(currentRecipe != null) {
             ArrayList<RecipeIngredient> ingredients = currentRecipe.getRecipeIngredients();
             ArrayList<RecipeStep> steps = currentRecipe.getRecipeSteps();
-
             textViewIngr.setText("Ingredients =" + ingredients.get(0));
-            textViewDesc.setText("steps 1 =" + steps.get(0));
 
+
+            // Create the adapter
+            // This adapter takes in the context and an ArrayList of ALL the image resources to display
+            MasterListAdapter mAdapter = new MasterListAdapter(getContext(), steps);
+
+            // Set the adapter on the GridView
+            gridView.setAdapter(mAdapter);
         }
-
-        // Return the rootView
+        // Return the root view
         return rootView;
     }
 

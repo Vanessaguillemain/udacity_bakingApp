@@ -13,8 +13,6 @@ import android.widget.TextView;
 import com.example.android.bakingapp.model.Recipe;
 import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
-
 /**
  * Created by vanessa on 16/02/2019.
  */
@@ -31,7 +29,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListViewHolder
 
     @Override
     public RecipeListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_row, parent, false);
+        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_row, parent, false);
         return new RecipeListViewHolder(mView);
     }
 
