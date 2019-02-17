@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.RecipeStep;
+import com.example.android.bakingapp.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -44,6 +45,11 @@ public class PlayStepFragment extends Fragment {
 
         // Inflate the Android-Me fragment layout
         View rootView = inflater.inflate(R.layout.fragment_play_step, container, false);
+
+        if(savedInstanceState != null) {
+            currentRecipe = savedInstanceState.getParcelable(Utils.BUNDLE_KEY_RECIPE);
+            currentStep = savedInstanceState.getInt(Utils.BUNDLE_KEY_STEP_INDEX);
+        }
 
         TextView textViewDescription = (TextView) rootView.findViewById(R.id.tvDescription);
         ImageView imageView = (ImageView) rootView.findViewById(R.id.ivPlayer);
@@ -117,6 +123,15 @@ public class PlayStepFragment extends Fragment {
 
     public void setCurrentStep(int currentStep) {
         this.currentStep = currentStep;
+    }
+
+    /**
+     * Save the current state of this fragment
+     */
+    @Override
+    public void onSaveInstanceState(Bundle currentState) {
+        currentState.putParcelable(Utils.BUNDLE_KEY_RECIPE, currentRecipe);
+        currentState.putInt(Utils.BUNDLE_KEY_STEP_INDEX, currentStep);
     }
 
 }

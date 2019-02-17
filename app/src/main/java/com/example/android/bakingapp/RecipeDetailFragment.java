@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.RecipeIngredient;
 import com.example.android.bakingapp.model.RecipeStep;
+import com.example.android.bakingapp.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 public class RecipeDetailFragment extends Fragment {
 
     private Recipe currentRecipe;
+    private int currentStep;
 
     // Define a new interface OnImageClickListener that triggers a callback in the host activity
     OnImageClickListener mCallback;
@@ -66,12 +68,15 @@ public class RecipeDetailFragment extends Fragment {
         //TextView textViewDesc = (TextView) rootView.findViewById(R.id.tvDescription);
         // Get a reference to the GridView in the fragment_master_list xml layout file
         GridView gridView = (GridView) rootView.findViewById(R.id.steps_grid_view);
+        if(savedInstanceState != null) {
+            currentRecipe = savedInstanceState.getParcelable(Utils.BUNDLE_KEY_RECIPE);
+            currentStep = savedInstanceState.getInt(Utils.BUNDLE_KEY_STEP_INDEX);
+        }
 
         if(currentRecipe != null) {
             ArrayList<RecipeIngredient> ingredients = currentRecipe.getRecipeIngredients();
             ArrayList<RecipeStep> steps = currentRecipe.getRecipeSteps();
             textViewIngr.setText("Ingredients =" + ingredients.get(0));
-
 
             // Create the adapter
             // This adapter takes in the context and an ArrayList of ALL the image resources to display
@@ -99,5 +104,14 @@ public class RecipeDetailFragment extends Fragment {
 
     public void setCurrentRecipe(Recipe currentRecipe) {
         this.currentRecipe = currentRecipe;
+    }
+
+    /**
+     * Save the current state of this fragment
+     */
+    @Override
+    public void onSaveInstanceState(Bundle currentState) {
+        currentState.putParcelable(Utils.BUNDLE_KEY_RECIPE, currentRecipe);
+        currentState.putInt(Utils.BUNDLE_KEY_STEP_INDEX, currentStep);
     }
 }

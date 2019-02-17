@@ -25,6 +25,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
 
     private Recipe mRecipe;
     private boolean mTwoPane;
+    private int mCurrentStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +38,15 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mRecipe = getIntent().getExtras().getParcelable(Utils.BUNDLE_KEY_RECIPE);
+        if(savedInstanceState != null) {
+            mRecipe = savedInstanceState.getParcelable(Utils.BUNDLE_KEY_RECIPE);
+            mCurrentStep = savedInstanceState.getInt(Utils.BUNDLE_KEY_STEP_INDEX);
+        } else {
+            mRecipe = getIntent().getExtras().getParcelable(Utils.BUNDLE_KEY_RECIPE);
+            mCurrentStep = 0;
+        }
         this.setTitle(mRecipe.getName());
+
 
         // Create a new head BodyPartFragment
         RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
@@ -58,8 +66,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
             // Create a new Fragment
             PlayStepFragment playStepFragment = new PlayStepFragment();
             playStepFragment.setCurrentRecipe(mRecipe);
-            playStepFragment.setCurrentStep(0);
-            //playStepFragment.desactivateButtons();
+            playStepFragment.setCurrentStep(mCurrentStep);
 
             //TODO temporaire
             playStepFragment.setmContext(this);
@@ -90,6 +97,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
 
         if(mTwoPane) {
             // Create a new Fragment
+            mCurrentStep = position;
             PlayStepFragment playStepFragment = new PlayStepFragment();
             playStepFragment.setCurrentRecipe(mRecipe);
             playStepFragment.setCurrentStep(position);
@@ -111,5 +119,15 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
             startActivity(intent);
         }
 
+    }
+
+    /**
+     * Save the current state of this fragment
+     */
+    @Override
+    public void onSaveInstanceState(Bundle currentState) {
+        super.onSaveInstanceState(currentState);
+        currentState.putParcelable(Utils.BUNDLE_KEY_RECIPE, mRecipe);
+        currentState.putInt(Utils.BUNDLE_KEY_STEP_INDEX, mCurrentStep);
     }
 }

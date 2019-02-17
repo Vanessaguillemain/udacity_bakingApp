@@ -15,7 +15,7 @@
 
     <TextView android:id="@+id/tvDescription"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/play_step_tv_descrption_height"
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="Step description"

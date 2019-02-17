@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="play_step_tv_descrption_height">300dp</dimen>
     <dimen name="left_layout_width">300dp</dimen>
     <dimen name="right_layout_width">450dp</dimen>
 </resources>
