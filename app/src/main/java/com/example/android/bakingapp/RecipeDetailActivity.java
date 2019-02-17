@@ -15,12 +15,12 @@ import butterknife.ButterKnife;
  * Created by vanessa on 16/02/2019.
  */
 
-public class RecipeActivity  extends AppCompatActivity {
+public class RecipeDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.recipe_detail);
+        setContentView(R.layout.activity_recipe_detail);
         ButterKnife.bind(this);
 
         ActionBar actionBar = this.getSupportActionBar();
@@ -32,7 +32,7 @@ public class RecipeActivity  extends AppCompatActivity {
         this.setTitle(recipe.getName());
 
         // Create a new head BodyPartFragment
-        ElementsRecipeFragment listFragment = new ElementsRecipeFragment();
+        RecipeDetailFragment listFragment = new RecipeDetailFragment();
         listFragment.setCurrentRecipe(recipe);
 
         // Add the fragment to its container using a FragmentManager and a Transaction

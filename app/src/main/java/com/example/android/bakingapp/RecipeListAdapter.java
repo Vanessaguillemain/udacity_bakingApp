@@ -49,7 +49,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListViewHolder
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mIntent = new Intent(mContext, RecipeActivity.class);
+                Intent mIntent = new Intent(mContext, RecipeDetailActivity.class);
                 mIntent.putExtra("recipe", mRecipeList[holder.getAdapterPosition()]);
                 mContext.startActivity(mIntent);
             }

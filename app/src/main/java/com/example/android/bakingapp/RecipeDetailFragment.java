@@ -18,14 +18,14 @@ import java.util.ArrayList;
  * Created by vanessa on 16/02/2019.
  */
 
-public class ElementsRecipeFragment extends Fragment {
+public class RecipeDetailFragment extends Fragment {
 
     private Recipe currentRecipe;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment
      */
-    public ElementsRecipeFragment() {
+    public RecipeDetailFragment() {
     }
 
     /**
@@ -35,7 +35,7 @@ public class ElementsRecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the Android-Me fragment layout
-        View rootView = inflater.inflate(R.layout.fragment_list_elements, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_recipe_details, container, false);
 
         TextView textViewIngr = (TextView) rootView.findViewById(R.id.tvIngredients);
         //TextView textViewDesc = (TextView) rootView.findViewById(R.id.tvDescription);
