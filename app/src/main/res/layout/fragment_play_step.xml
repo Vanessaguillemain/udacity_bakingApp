@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ivPlayer"
+        android:layout_width="match_parent"
+        android:background="@drawable/film"
+        android:layout_height="150dp">
+    </ImageView>
+
+    <TextView android:id="@+id/tvDescription"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:gravity="center"
+        android:text="Ingredients"
+        android:textSize="18sp"
+        android:background="@drawable/back"
+        android:textStyle="italic|bold"
+        xmlns:android="http://schemas.android.com/apk/res/android" />
+
+</LinearLayout>
