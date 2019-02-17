@@ -1,16 +1,14 @@
 package com.example.android.bakingapp;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.android.bakingapp.model.Recipe;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -18,8 +16,6 @@ import butterknife.ButterKnife;
  */
 
 public class RecipeActivity  extends AppCompatActivity {
-    @BindView((R.id.ivImage)) ImageView mFlower;
-    @BindView((R.id.tvDescription)) TextView mDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +29,18 @@ public class RecipeActivity  extends AppCompatActivity {
         }
 
         Recipe recipe = getIntent().getExtras().getParcelable("recipe");
-        if (recipe != null) {
-            mFlower.setImageResource(recipe.getImageTest());
-            mDescription.setText(recipe.getName());
-            this.setTitle(recipe.getName());
-        }
+
+        // Create a new head BodyPartFragment
+        ElementsRecipeFragment listFragment = new ElementsRecipeFragment();
+        listFragment.setCurrentRecipe(recipe);
+
+        // Add the fragment to its container using a FragmentManager and a Transaction
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .add(R.id.list_elements_container, listFragment)
+                .commit();
+
     }
 
     @Override
