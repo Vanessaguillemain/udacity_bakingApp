@@ -1,13 +1,16 @@
 package com.example.android.bakingapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.RecipeIngredient;
@@ -23,6 +26,10 @@ public class PlayStepFragment extends Fragment {
 
     private Recipe currentRecipe;
     private int currentStep;
+    //TODO temporaore
+    private Context mContext;
+    private Button mBtnBefore;
+    private Button mBtnAfter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment
@@ -41,6 +48,22 @@ public class PlayStepFragment extends Fragment {
 
         TextView textViewDescription = (TextView) rootView.findViewById(R.id.tvDescription);
         ImageView imageView = (ImageView) rootView.findViewById(R.id.ivPlayer);
+        mBtnBefore = (Button) rootView.findViewById(R.id.btnBefore);
+        mBtnAfter = (Button) rootView.findViewById(R.id.btnAfter);
+        setButtons();
+        mBtnBefore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "before", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mBtnAfter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "after", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         if(currentRecipe != null) {
             ArrayList<RecipeStep> steps = currentRecipe.getRecipeSteps();
@@ -60,6 +83,28 @@ public class PlayStepFragment extends Fragment {
 
     public int getCurrentStep() {
         return currentStep;
+    }
+
+    private void setButtons(){
+        if(currentStep == 0) {
+            mBtnBefore.setEnabled(false);
+            mBtnAfter.setEnabled(true);
+        } else if (currentStep == currentRecipe.getRecipeSteps().size()-1){
+            mBtnBefore.setEnabled(true);
+            mBtnAfter.setEnabled(false);
+        } else {
+            mBtnBefore.setEnabled(true);
+            mBtnAfter.setEnabled(true);
+        }
+    }
+
+    //TODO temporaore
+    public Context getmContext() {
+        return mContext;
+    }
+    //TODO temporaore
+    public void setmContext(Context mContext) {
+        this.mContext = mContext;
     }
 
     public void setCurrentStep(int currentStep) {
