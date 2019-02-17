@@ -7,13 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.bakingapp.model.Recipe;
-import com.example.android.bakingapp.model.RecipeIngredient;
 import com.example.android.bakingapp.model.RecipeStep;
 
 import java.util.ArrayList;
@@ -30,6 +28,7 @@ public class PlayStepFragment extends Fragment {
     private Context mContext;
     private Button mBtnBefore;
     private Button mBtnAfter;
+    private boolean buttonsActivated ;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment
@@ -50,24 +49,30 @@ public class PlayStepFragment extends Fragment {
         ImageView imageView = (ImageView) rootView.findViewById(R.id.ivPlayer);
         mBtnBefore = (Button) rootView.findViewById(R.id.btnBefore);
         mBtnAfter = (Button) rootView.findViewById(R.id.btnAfter);
-        setButtons();
-        mBtnBefore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "before", Toast.LENGTH_SHORT).show();
-            }
-        });
+        initButtonsState();
+        if(buttonsActivated) {
+            setButtons();
+            mBtnBefore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "before", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-        mBtnAfter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "after", Toast.LENGTH_SHORT).show();
-            }
-        });
+            mBtnAfter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "after", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            mBtnBefore.setVisibility(View.GONE);
+            mBtnAfter.setVisibility(View.GONE);
 
+        }
         if(currentRecipe != null) {
             ArrayList<RecipeStep> steps = currentRecipe.getRecipeSteps();
-            textViewDescription.setText("Descriptions =" + steps.get(currentStep).getDescription());
+            textViewDescription.setText(steps.get(currentStep).getDescription());
         }
         // Return the root view
         return rootView;
@@ -81,6 +86,9 @@ public class PlayStepFragment extends Fragment {
         this.currentRecipe = currentRecipe;
     }
 
+    public void initButtonsState() {
+        buttonsActivated = getResources().getBoolean(R.bool.buttons_visibility);
+    }
     public int getCurrentStep() {
         return currentStep;
     }
@@ -110,4 +118,5 @@ public class PlayStepFragment extends Fragment {
     public void setCurrentStep(int currentStep) {
         this.currentStep = currentStep;
     }
+
 }
