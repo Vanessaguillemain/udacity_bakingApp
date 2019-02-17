@@ -16,6 +16,7 @@ import com.example.android.bakingapp.model.RecipeStep;
 import com.example.android.bakingapp.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by vanessa on 17/02/2019.
@@ -24,11 +25,14 @@ import java.util.ArrayList;
 public class PlayStepFragment extends Fragment {
 
     private Recipe currentRecipe;
+    private List<RecipeStep> recipeSteps;
     private int currentStep;
+    private int stepsSize;
     //TODO temporaore
     private Context mContext;
     private Button mBtnBefore;
     private Button mBtnAfter;
+    private TextView mTextViewDescription;
     private boolean buttonsActivated ;
 
     /**
@@ -49,9 +53,12 @@ public class PlayStepFragment extends Fragment {
         if(savedInstanceState != null) {
             currentRecipe = savedInstanceState.getParcelable(Utils.BUNDLE_KEY_RECIPE);
             currentStep = savedInstanceState.getInt(Utils.BUNDLE_KEY_STEP_INDEX);
-        }
 
-        TextView textViewDescription = (TextView) rootView.findViewById(R.id.tvDescription);
+        }
+        recipeSteps = currentRecipe.getRecipeSteps();
+        stepsSize = recipeSteps.size();
+
+        mTextViewDescription = (TextView) rootView.findViewById(R.id.tvDescription);
         ImageView imageView = (ImageView) rootView.findViewById(R.id.ivPlayer);
         mBtnBefore = (Button) rootView.findViewById(R.id.btnBefore);
         mBtnAfter = (Button) rootView.findViewById(R.id.btnAfter);
@@ -62,6 +69,7 @@ public class PlayStepFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(mContext, "before", Toast.LENGTH_SHORT).show();
+                    loadStepBefore();
                 }
             });
 
@@ -69,6 +77,7 @@ public class PlayStepFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(mContext, "after", Toast.LENGTH_SHORT).show();
+                    loadStepAfter();
                 }
             });
         } else {
@@ -77,11 +86,22 @@ public class PlayStepFragment extends Fragment {
 
         }
         if(currentRecipe != null) {
-            ArrayList<RecipeStep> steps = currentRecipe.getRecipeSteps();
-            textViewDescription.setText(steps.get(currentStep).getDescription());
+            recipeSteps = currentRecipe.getRecipeSteps();
+            stepsSize = recipeSteps.size();
+            mTextViewDescription.setText(recipeSteps.get(currentStep).getDescription());
         }
         // Return the root view
         return rootView;
+    }
+    private void loadStepBefore() {
+        currentStep = currentStep -1;
+        mTextViewDescription.setText(recipeSteps.get(currentStep).getDescription());
+        setButtons();
+    }
+    private void loadStepAfter() {
+        currentStep = currentStep +1;
+        mTextViewDescription.setText(recipeSteps.get(currentStep).getDescription());
+        setButtons();
     }
 
     public Recipe getCurrentRecipe() {
@@ -103,7 +123,7 @@ public class PlayStepFragment extends Fragment {
         if(currentStep == 0) {
             mBtnBefore.setEnabled(false);
             mBtnAfter.setEnabled(true);
-        } else if (currentStep == currentRecipe.getRecipeSteps().size()-1){
+        } else if (currentStep == stepsSize-1){
             mBtnBefore.setEnabled(true);
             mBtnAfter.setEnabled(false);
         } else {

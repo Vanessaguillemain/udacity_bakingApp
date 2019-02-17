@@ -18,7 +18,7 @@ public class PlayStepActivity extends AppCompatActivity {
         Recipe recipe = getIntent().getExtras().getParcelable(Utils.BUNDLE_KEY_RECIPE);
         int index = getIntent().getExtras().getInt(Utils.BUNDLE_KEY_STEP_INDEX);
         int indexTitle = index+1;
-        this.setTitle(recipe.getName()+ " - step " + indexTitle);
+        this.setTitle(recipe.getName());
 
         // Create a new Fragment
         PlayStepFragment playStepFragment = new PlayStepFragment();
