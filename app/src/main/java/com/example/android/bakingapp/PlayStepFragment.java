@@ -55,37 +55,46 @@ public class PlayStepFragment extends Fragment {
         recipeSteps = currentRecipe.getRecipeSteps();
         stepsSize = recipeSteps.size();
 
-        mTextViewDescription = (TextView) rootView.findViewById(R.id.tvDescription);
         ImageView imageView = (ImageView) rootView.findViewById(R.id.ivPlayer);
-        mBtnBefore = (Button) rootView.findViewById(R.id.btnBefore);
-        mBtnAfter = (Button) rootView.findViewById(R.id.btnAfter);
-        initButtonsState();
-        if(buttonsActivated) {
-            setButtons();
-            mBtnBefore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    loadStepBefore();
-                }
-            });
 
-            mBtnAfter.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    loadStepAfter();
+        //We are in Portrait mode
+        if(rootView.findViewById(R.id.tvDescription) != null) {
+            mTextViewDescription = rootView.findViewById(R.id.tvDescription);
+            if (currentRecipe != null) {
+                recipeSteps = currentRecipe.getRecipeSteps();
+                stepsSize = recipeSteps.size();
+                if (currentStep >= 0) {
+                    mTextViewDescription.setText(recipeSteps.get(currentStep).getDescription());
                 }
-            });
-        } else {
-            mBtnBefore.setVisibility(View.GONE);
-            mBtnAfter.setVisibility(View.GONE);
-
-        }
-        if(currentRecipe != null) {
-            recipeSteps = currentRecipe.getRecipeSteps();
-            stepsSize = recipeSteps.size();
-            if (currentStep >= 0) {
-                mTextViewDescription.setText(recipeSteps.get(currentStep).getDescription());
             }
+
+            //There are buttons for phone mode
+            if (rootView.findViewById(R.id.btnBefore) !=null) {
+                mBtnBefore = rootView.findViewById(R.id.btnBefore);
+                mBtnAfter = rootView.findViewById(R.id.btnAfter);
+                //initButtonsState();
+                //if (buttonsActivated) {
+                setButtons();
+                mBtnBefore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        loadStepBefore();
+                    }
+                });
+                mBtnAfter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        loadStepAfter();
+                    }
+                });
+                /*} else {
+                    mBtnBefore.setVisibility(View.GONE);
+                    mBtnAfter.setVisibility(View.GONE);
+
+                }*/
+            }
+
+
         }
         // Return the root view
         return rootView;
@@ -101,19 +110,12 @@ public class PlayStepFragment extends Fragment {
         setButtons();
     }
 
-    public Recipe getCurrentRecipe() {
-        return currentRecipe;
-    }
-
     public void setCurrentRecipe(Recipe currentRecipe) {
         this.currentRecipe = currentRecipe;
     }
 
     public void initButtonsState() {
         buttonsActivated = getResources().getBoolean(R.bool.buttons_visibility);
-    }
-    public int getCurrentStep() {
-        return currentStep;
     }
 
     private void setButtons(){

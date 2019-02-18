@@ -12,4 +12,13 @@
         android:layout_height="wrap_content"
         android:scrollbars="vertical" />
 
+    <TextView
+        android:id="@+id/tv_error_message_display"
+        android:textSize="@dimen/main_tv_error_text_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/main_tv_error_padding"
+        android:text="@string/error_no_internet"
+        android:visibility="invisible" />
+
 </android.support.constraint.ConstraintLayout>

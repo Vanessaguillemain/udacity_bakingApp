@@ -138,7 +138,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
     }
 
     /**
-     * Save the current state of this fragment
+     * Save the current state of this Activity
      */
     @Override
     public void onSaveInstanceState(Bundle currentState) {

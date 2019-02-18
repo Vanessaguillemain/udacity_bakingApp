@@ -53,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements TaskInformer {
             makeRecipesSearchQuery(Utils.PATH_JSON_FILE_WEB);
             //recherche asset
             //mRecipeTab = JsonRecipeUtils.getRecipesFromJsonAssetWithGson(this);
-
-
         }
 
     }
