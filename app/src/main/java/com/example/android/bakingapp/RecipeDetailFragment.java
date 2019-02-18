@@ -85,7 +85,7 @@ public class RecipeDetailFragment extends Fragment {
             ArrayList<RecipeIngredient> ingredients = currentRecipe.getRecipeIngredients();
             ArrayList<RecipeStep> steps = currentRecipe.getRecipeSteps();
             //TODO
-            textViewIngr.setText("Ingredients =" + ingredients.get(0));
+            textViewIngr.setText(getIngredientsString(ingredients));
 
             // Create the adapter
             // This adapter takes in the context and an ArrayList of ALL the image resources to display
@@ -105,6 +105,14 @@ public class RecipeDetailFragment extends Fragment {
         }
         // Return the root view
         return rootView;
+    }
+
+    private String getIngredientsString(ArrayList<RecipeIngredient> ingredients) {
+        String result ="";
+        for(RecipeIngredient ingredient : ingredients){
+            result += ingredient.getFullStringIngredient() + "\n";
+        }
+        return result;
     }
 
     public void setCurrentRecipe(Recipe currentRecipe) {

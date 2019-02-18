@@ -24,8 +24,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
     private Recipe mRecipe;
     private boolean mTwoPane;
     private int mCurrentStep = -1;
-    private View mPrecedentView;
-    private View mCurrentView;
     RecipeDetailFragment recipeDetailFragment;
 
     @Override
@@ -106,7 +104,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
 
     @Override
     public void onRecipeStepSelected(int position, View view) {
-        mPrecedentView = mCurrentView;
 
         if(mTwoPane) {
             // Create a new Fragment for replacing
@@ -138,7 +135,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
             startActivity(intent);
         }
         mCurrentStep = position;
-        mCurrentView = view;
     }
 
     /**

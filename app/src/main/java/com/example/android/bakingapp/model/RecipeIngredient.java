@@ -68,6 +68,10 @@ public class RecipeIngredient implements Parcelable {
         this.ingredient = ingredient;
     }
 
+    public String getFullStringIngredient() {
+        return "- "+ quantity + " " + measure + " " + ingredient;
+    }
+
     @Override
     public String toString() {
         return "RecipeIngredient{" +
