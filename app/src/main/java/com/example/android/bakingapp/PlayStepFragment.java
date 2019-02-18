@@ -83,7 +83,9 @@ public class PlayStepFragment extends Fragment {
         if(currentRecipe != null) {
             recipeSteps = currentRecipe.getRecipeSteps();
             stepsSize = recipeSteps.size();
-            mTextViewDescription.setText(recipeSteps.get(currentStep).getDescription());
+            if (currentStep >= 0) {
+                mTextViewDescription.setText(recipeSteps.get(currentStep).getDescription());
+            }
         }
         // Return the root view
         return rootView;

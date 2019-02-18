@@ -35,7 +35,7 @@ public class RecipeDetailFragment extends Fragment {
         this.currentStep = currentStep;
     }
 
-    private int currentStep;
+    private int currentStep = -1;
 
     // Define a new interface OnRecipeStepClickListener that triggers a callback in the host activity
     OnRecipeStepClickListener mCallback;

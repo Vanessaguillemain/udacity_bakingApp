@@ -21,7 +21,6 @@ public class RecipeDetailAdapter extends BaseAdapter {
     private List<RecipeStep> mRecipeSteps;
     private int mCurrentStep;
     private View mCurrentView;
-    private boolean mSomethingSelected = false;
 
     /**
      * Constructor method
@@ -68,8 +67,7 @@ public class RecipeDetailAdapter extends BaseAdapter {
         }
         String s = mRecipeSteps.get(position).getShortDescription();
         textViewStep.setText(s);
-        if(mCurrentStep != 0 && mCurrentStep == position) {
-        //if(mSomethingSelected && mCurrentStep == position) {
+        if(mCurrentStep != -1 && mCurrentStep == position) {
             textViewStep.setBackgroundResource(R.color.colorAccent);
             mCurrentView = textViewStep;
         } else {
@@ -79,11 +77,5 @@ public class RecipeDetailAdapter extends BaseAdapter {
         return textViewStep;
     }
 
-    public boolean isSomethingSelected() {
-        return mSomethingSelected;
-    }
 
-    public void setSomethingSelected(boolean mSomethingSelected) {
-        this.mSomethingSelected = mSomethingSelected;
-    }
 }

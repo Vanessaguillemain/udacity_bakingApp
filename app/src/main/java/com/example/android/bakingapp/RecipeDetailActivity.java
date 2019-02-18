@@ -23,10 +23,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
 
     private Recipe mRecipe;
     private boolean mTwoPane;
-    private int mCurrentStep;
+    private int mCurrentStep = -1;
     private View mPrecedentView;
     private View mCurrentView;
-    private boolean precedentStepExists = false;
     RecipeDetailFragment recipeDetailFragment;
 
     @Override
@@ -43,43 +42,57 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         if(savedInstanceState != null) {
             mRecipe = savedInstanceState.getParcelable(Utils.BUNDLE_KEY_RECIPE);
             mCurrentStep = savedInstanceState.getInt(Utils.BUNDLE_KEY_STEP_INDEX);
-            precedentStepExists = savedInstanceState.getBoolean(Utils.BUNDLE_KEY_PRECEDENT_STEP_EXISTS);
+
         } else {
             mRecipe = getIntent().getExtras().getParcelable(Utils.BUNDLE_KEY_RECIPE);
-            mCurrentStep = 0;
+            mCurrentStep = -1;
         }
         this.setTitle(mRecipe.getName());
 
-        // Create a new Fragment
-        recipeDetailFragment = new RecipeDetailFragment();
-        recipeDetailFragment.setCurrentRecipe(mRecipe);
-        //TODO
-        recipeDetailFragment.setCurrentStep(mCurrentStep);
-
-        // Add the fragment to its container using a FragmentManager and a Transaction
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        fragmentManager.beginTransaction()
-                .add(R.id.list_elements_container, recipeDetailFragment)
-                .commit();
-
-        if(findViewById(R.id.play_step_container) != null) {
-            // This LinearLayout will only initially exist in the two-pane tablet case
+        if (findViewById(R.id.play_step_container) != null) {
             mTwoPane = true;
-
+        }else {
+            mTwoPane = false;
+        }
+        if(savedInstanceState == null) {
             // Create a new Fragment
-            PlayStepFragment playStepFragment = new PlayStepFragment();
-            playStepFragment.setCurrentRecipe(mRecipe);
-            playStepFragment.setCurrentStep(mCurrentStep);
+            recipeDetailFragment = new RecipeDetailFragment();
+            recipeDetailFragment.setCurrentRecipe(mRecipe);
+            recipeDetailFragment.setCurrentStep(mCurrentStep);
 
+            // Add the fragment to its container using a FragmentManager and a Transaction
+            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .add(R.id.play_step_container, playStepFragment)
+                    .add(R.id.list_elements_container, recipeDetailFragment)
                     .commit();
 
-        } else {
-            mTwoPane =  false;
-        }
+            if (findViewById(R.id.play_step_container) != null) {
+                // This LinearLayout will only initially exist in the two-pane tablet case
+                mTwoPane = true;
+                // Create a new Fragment
+                PlayStepFragment playStepFragment = new PlayStepFragment();
+                playStepFragment.setCurrentRecipe(mRecipe);
+                playStepFragment.setCurrentStep(mCurrentStep);
 
+                fragmentManager.beginTransaction()
+                        .add(R.id.play_step_container, playStepFragment)
+                        .commit();
+
+            } else {
+                mTwoPane = false;
+            }
+        } else {
+            // Create a new Fragment for replacing
+            recipeDetailFragment = new RecipeDetailFragment();
+            recipeDetailFragment.setCurrentRecipe(mRecipe);
+            recipeDetailFragment.setCurrentStep(mCurrentStep);
+
+            // Add the fragment to its container using a FragmentManager and a Transaction
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.list_elements_container, recipeDetailFragment)
+                    .commit();
+        }
     }
 
     @Override
@@ -97,22 +110,20 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
 
         if(mTwoPane) {
             // Create a new Fragment for replacing
+            recipeDetailFragment = new RecipeDetailFragment();
+            recipeDetailFragment.setCurrentRecipe(mRecipe);
+            recipeDetailFragment.setCurrentStep(position);
+
+            // Add the fragment to its container using a FragmentManager and a Transaction
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.list_elements_container, recipeDetailFragment)
+                    .commit();
+
+            // Create a new Fragment for replacing
             PlayStepFragment playStepFragment = new PlayStepFragment();
             playStepFragment.setCurrentRecipe(mRecipe);
             playStepFragment.setCurrentStep(position);
-
-            recipeDetailFragment.getAdapter().setSomethingSelected(true);
-
-            //Case we come from onSavedInstanceState
-            if(precedentStepExists && mPrecedentView == null) {
-                View precedentView = recipeDetailFragment.getAdapter().getCurrentView();
-                precedentView.setBackgroundResource(R.drawable.back);
-            }
-            if(mPrecedentView != null) {
-                mPrecedentView.setBackgroundResource(R.drawable.back);
-            }
-            view.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.play_step_container, playStepFragment)
                     .commit();
@@ -128,7 +139,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         }
         mCurrentStep = position;
         mCurrentView = view;
-        precedentStepExists = true;
     }
 
     /**
@@ -139,6 +149,5 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         super.onSaveInstanceState(currentState);
         currentState.putParcelable(Utils.BUNDLE_KEY_RECIPE, mRecipe);
         currentState.putInt(Utils.BUNDLE_KEY_STEP_INDEX, mCurrentStep);
-        currentState.putBoolean(Utils.BUNDLE_KEY_PRECEDENT_STEP_EXISTS, precedentStepExists);
     }
 }
