@@ -28,8 +28,6 @@ public class PlayStepFragment extends Fragment {
     private List<RecipeStep> recipeSteps;
     private int currentStep;
     private int stepsSize;
-    //TODO temporaore
-   // private Context mContext;
     private Button mBtnBefore;
     private Button mBtnAfter;
     private TextView mTextViewDescription;
@@ -53,7 +51,6 @@ public class PlayStepFragment extends Fragment {
         if(savedInstanceState != null) {
             currentRecipe = savedInstanceState.getParcelable(Utils.BUNDLE_KEY_RECIPE);
             currentStep = savedInstanceState.getInt(Utils.BUNDLE_KEY_STEP_INDEX);
-
         }
         recipeSteps = currentRecipe.getRecipeSteps();
         stepsSize = recipeSteps.size();
@@ -68,7 +65,6 @@ public class PlayStepFragment extends Fragment {
             mBtnBefore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Toast.makeText(mContext, "before", Toast.LENGTH_SHORT).show();
                     loadStepBefore();
                 }
             });
@@ -76,7 +72,6 @@ public class PlayStepFragment extends Fragment {
             mBtnAfter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Toast.makeText(mContext, "after", Toast.LENGTH_SHORT).show();
                     loadStepAfter();
                 }
             });
@@ -132,16 +127,6 @@ public class PlayStepFragment extends Fragment {
         }
     }
 
-    /*
-    //TODO temporaore
-    public Context getmContext() {
-        return mContext;
-    }
-    //TODO temporaore
-    public void setmContext(Context mContext) {
-        this.mContext = mContext;
-    }
-*/
     public void setCurrentStep(int currentStep) {
         this.currentStep = currentStep;
     }

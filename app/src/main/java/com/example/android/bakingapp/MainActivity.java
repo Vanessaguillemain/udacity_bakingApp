@@ -1,12 +1,15 @@
 package com.example.android.bakingapp;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.android.bakingapp.json.JsonRecipeUtils;
 import com.example.android.bakingapp.model.Recipe;
+
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,7 +25,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null){
-            mRecipeTab = (Recipe[]) savedInstanceState.getParcelableArray(BUNDLE_KEY_RECIPE_TAB);
+            //mRecipeTab = (Recipe[]) savedInstanceState.getParcelableArray(BUNDLE_KEY_RECIPE_TAB);
+            Parcelable[] a = savedInstanceState.getParcelableArray(BUNDLE_KEY_RECIPE_TAB);
+            mRecipeTab = Arrays.copyOf(a, a.length, Recipe[].class);
+
         } else {
             mRecipeTab = JsonRecipeUtils.getRecipesFromJsonWithGson(this);
         }

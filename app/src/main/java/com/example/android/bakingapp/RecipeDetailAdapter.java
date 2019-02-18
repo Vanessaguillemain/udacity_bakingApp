@@ -19,14 +19,18 @@ public class RecipeDetailAdapter extends BaseAdapter {
     // Keeps track of the context and list of recipe steps to display
     private Context mContext;
     private List<RecipeStep> mRecipeSteps;
+    private int mCurrentStep;
+    private View mCurrentView;
+    private boolean mSomethingSelected = false;
 
     /**
      * Constructor method
      * @param steps The list of steps to display
      */
-    public RecipeDetailAdapter(Context context, List<RecipeStep> steps) {
+    public RecipeDetailAdapter(Context context, List<RecipeStep> steps, int currentStep) {
         mContext = context;
         mRecipeSteps = steps;
+        mCurrentStep = currentStep;
     }
 
     /**
@@ -42,6 +46,9 @@ public class RecipeDetailAdapter extends BaseAdapter {
         return null;
     }
 
+    public View getCurrentView() {
+        return mCurrentView;
+    }
     @Override
     public long getItemId(int i) {
         return 0;
@@ -61,8 +68,22 @@ public class RecipeDetailAdapter extends BaseAdapter {
         }
         String s = mRecipeSteps.get(position).getShortDescription();
         textViewStep.setText(s);
-        textViewStep.setBackgroundResource(R.drawable.back);
+        if(mCurrentStep != 0 && mCurrentStep == position) {
+        //if(mSomethingSelected && mCurrentStep == position) {
+            textViewStep.setBackgroundResource(R.color.colorAccent);
+            mCurrentView = textViewStep;
+        } else {
+            textViewStep.setBackgroundResource(R.drawable.back);
+        }
 
         return textViewStep;
+    }
+
+    public boolean isSomethingSelected() {
+        return mSomethingSelected;
+    }
+
+    public void setSomethingSelected(boolean mSomethingSelected) {
+        this.mSomethingSelected = mSomethingSelected;
     }
 }

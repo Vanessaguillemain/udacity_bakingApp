@@ -24,6 +24,17 @@ import java.util.ArrayList;
 public class RecipeDetailFragment extends Fragment {
 
     private Recipe currentRecipe;
+    RecipeDetailAdapter mAdapter;
+    GridView gridView;
+
+    public int getCurrentStep() {
+        return currentStep;
+    }
+
+    public void setCurrentStep(int currentStep) {
+        this.currentStep = currentStep;
+    }
+
     private int currentStep;
 
     // Define a new interface OnRecipeStepClickListener that triggers a callback in the host activity
@@ -31,7 +42,7 @@ public class RecipeDetailFragment extends Fragment {
 
     // OnRecipeStepClickListener interface, calls a method in the host activity named onRecipeStepSelected
     public interface OnRecipeStepClickListener {
-        void onRecipeStepSelected(int position);
+        void onRecipeStepSelected(int position, View view);
     }
 
     /**
@@ -44,7 +55,6 @@ public class RecipeDetailFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         // This makes sure that the host activity has implemented the callback interface
         // If not, it throws an exception
         try {
@@ -64,10 +74,8 @@ public class RecipeDetailFragment extends Fragment {
         // Inflate the Android-Me fragment layout
         View rootView = inflater.inflate(R.layout.fragment_recipe_details, container, false);
 
-        TextView textViewIngr = (TextView) rootView.findViewById(R.id.tvIngredients);
-        //TextView textViewDesc = (TextView) rootView.findViewById(R.id.tvDescription);
-        // Get a reference to the GridView in the fragment_master_list xml layout file
-        GridView gridView = (GridView) rootView.findViewById(R.id.steps_grid_view);
+        TextView textViewIngr = rootView.findViewById(R.id.tvIngredients);
+        gridView = rootView.findViewById(R.id.steps_grid_view);
         if(savedInstanceState != null) {
             currentRecipe = savedInstanceState.getParcelable(Utils.BUNDLE_KEY_RECIPE);
             currentStep = savedInstanceState.getInt(Utils.BUNDLE_KEY_STEP_INDEX);
@@ -76,11 +84,12 @@ public class RecipeDetailFragment extends Fragment {
         if(currentRecipe != null) {
             ArrayList<RecipeIngredient> ingredients = currentRecipe.getRecipeIngredients();
             ArrayList<RecipeStep> steps = currentRecipe.getRecipeSteps();
+            //TODO
             textViewIngr.setText("Ingredients =" + ingredients.get(0));
 
             // Create the adapter
             // This adapter takes in the context and an ArrayList of ALL the image resources to display
-            RecipeDetailAdapter mAdapter = new RecipeDetailAdapter(getContext(), steps);
+            mAdapter = new RecipeDetailAdapter(getContext(), steps, currentStep);
 
             // Set the adapter on the GridView
             gridView.setAdapter(mAdapter);
@@ -90,7 +99,7 @@ public class RecipeDetailFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                     // Trigger the callback method and pass in the position that was clicked
-                    mCallback.onRecipeStepSelected(position);
+                    mCallback.onRecipeStepSelected(position, view);
                 }
             });
         }
@@ -98,12 +107,12 @@ public class RecipeDetailFragment extends Fragment {
         return rootView;
     }
 
-    public Recipe getCurrentRecipe() {
-        return currentRecipe;
-    }
-
     public void setCurrentRecipe(Recipe currentRecipe) {
         this.currentRecipe = currentRecipe;
+    }
+
+    public RecipeDetailAdapter getAdapter() {
+        return mAdapter;
     }
 
     /**
