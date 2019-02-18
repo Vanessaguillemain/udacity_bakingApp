@@ -2,6 +2,8 @@
     <string name="app_name">BakingApp</string>
     <string name="nb_span">1</string>
 
+    <string name="error_no_internet">You are not connected to Internet. Check and try later please.</string>
+
     <!-- PERMISSIONS -->
     <string name="permission_error_occured">Permission error occurred!</string>
     <string name="permission_dialog_title">Permissions needed</string>

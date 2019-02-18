@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 
 import com.example.android.bakingapp.model.Recipe;
+import com.example.android.bakingapp.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -16,8 +17,12 @@ import java.io.InputStream;
 
 public class JsonRecipeUtils {
 
-    public static Recipe[] getRecipesFromJsonWithGson(Context context) {
+    public static Recipe[] getRecipesFromJsonAssetWithGson(Context context) {
         String json = loadJSONFromAsset(context);
+        return getRecipesFromStringWithGson( json) ;
+    }
+
+    public static Recipe[] getRecipesFromStringWithGson(String json) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
         Recipe[] recipeTab = gson.fromJson(json, Recipe[].class);
@@ -29,7 +34,7 @@ public class JsonRecipeUtils {
         AssetManager assetManager = context.getAssets();
         try {
             //TODO
-            InputStream is = assetManager.open("baking.json");
+            InputStream is = assetManager.open(Utils.PATH_JSON_FILE_ASSET);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
