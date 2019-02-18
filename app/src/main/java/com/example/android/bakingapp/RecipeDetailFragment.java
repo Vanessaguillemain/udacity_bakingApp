@@ -26,12 +26,12 @@ public class RecipeDetailFragment extends Fragment {
     private Recipe currentRecipe;
     private int currentStep;
 
-    // Define a new interface OnImageClickListener that triggers a callback in the host activity
-    OnImageClickListener mCallback;
+    // Define a new interface OnRecipeStepClickListener that triggers a callback in the host activity
+    OnRecipeStepClickListener mCallback;
 
-    // OnImageClickListener interface, calls a method in the host activity named onImageSelected
-    public interface OnImageClickListener {
-        void onImageSelected(int position);
+    // OnRecipeStepClickListener interface, calls a method in the host activity named onRecipeStepSelected
+    public interface OnRecipeStepClickListener {
+        void onRecipeStepSelected(int position);
     }
 
     /**
@@ -48,10 +48,10 @@ public class RecipeDetailFragment extends Fragment {
         // This makes sure that the host activity has implemented the callback interface
         // If not, it throws an exception
         try {
-            mCallback = (OnImageClickListener) context;
+            mCallback = (OnRecipeStepClickListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnImageClickListener");
+                    + " must implement OnRecipeStepClickListener");
         }
     }
 
@@ -85,12 +85,12 @@ public class RecipeDetailFragment extends Fragment {
             // Set the adapter on the GridView
             gridView.setAdapter(mAdapter);
 
-            // Set a click listener on the gridView and trigger the callback onImageSelected when an item is clicked
+            // Set a click listener on the gridView and trigger the callback onRecipeStepSelected when an item is clicked
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                     // Trigger the callback method and pass in the position that was clicked
-                    mCallback.onImageSelected(position);
+                    mCallback.onRecipeStepSelected(position);
                 }
             });
         }

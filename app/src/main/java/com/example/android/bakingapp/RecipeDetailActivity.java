@@ -6,10 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.android.bakingapp.model.Recipe;
@@ -21,7 +18,7 @@ import butterknife.ButterKnife;
  * Created by vanessa on 16/02/2019.
  */
 
-public class RecipeDetailActivity extends AppCompatActivity implements RecipeDetailFragment.OnImageClickListener{
+public class RecipeDetailActivity extends AppCompatActivity implements RecipeDetailFragment.OnRecipeStepClickListener {
 
     private Recipe mRecipe;
     private boolean mTwoPane;
@@ -69,7 +66,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
             playStepFragment.setCurrentStep(mCurrentStep);
 
             //TODO temporaire
-            playStepFragment.setmContext(this);
+            //playStepFragment.setmContext(this);
 
             fragmentManager.beginTransaction()
                     .add(R.id.play_step_container, playStepFragment)
@@ -91,25 +88,24 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
     }
 
     @Override
-    public void onImageSelected(int position) {
+    public void onRecipeStepSelected(int position) {
         // Create a Toast that displays the position that was clicked
         Toast.makeText(this, "Position clicked = " + position, Toast.LENGTH_SHORT).show();
+        mCurrentStep = position;
 
         if(mTwoPane) {
             // Create a new Fragment
-            mCurrentStep = position;
             PlayStepFragment playStepFragment = new PlayStepFragment();
             playStepFragment.setCurrentRecipe(mRecipe);
             playStepFragment.setCurrentStep(position);
             //TODO temporaire
-            playStepFragment.setmContext(this);
+            //playStepFragment.setmContext(this);
 
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.play_step_container, playStepFragment)
                     .commit();
 
         } else {
-            // TODO (3) Put this information in a Bundle and attach it to an Intent that will launch an AndroidMeActivity
             Bundle b = new Bundle();
             b.putInt(Utils.BUNDLE_KEY_STEP_INDEX, position);
             b.putParcelable(Utils.BUNDLE_KEY_RECIPE, mRecipe);

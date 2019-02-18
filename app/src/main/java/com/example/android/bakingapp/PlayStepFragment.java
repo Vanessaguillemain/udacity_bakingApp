@@ -29,7 +29,7 @@ public class PlayStepFragment extends Fragment {
     private int currentStep;
     private int stepsSize;
     //TODO temporaore
-    private Context mContext;
+   // private Context mContext;
     private Button mBtnBefore;
     private Button mBtnAfter;
     private TextView mTextViewDescription;
@@ -68,7 +68,7 @@ public class PlayStepFragment extends Fragment {
             mBtnBefore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "before", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "before", Toast.LENGTH_SHORT).show();
                     loadStepBefore();
                 }
             });
@@ -76,7 +76,7 @@ public class PlayStepFragment extends Fragment {
             mBtnAfter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "after", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "after", Toast.LENGTH_SHORT).show();
                     loadStepAfter();
                 }
             });
@@ -132,6 +132,7 @@ public class PlayStepFragment extends Fragment {
         }
     }
 
+    /*
     //TODO temporaore
     public Context getmContext() {
         return mContext;
@@ -140,7 +141,7 @@ public class PlayStepFragment extends Fragment {
     public void setmContext(Context mContext) {
         this.mContext = mContext;
     }
-
+*/
     public void setCurrentStep(int currentStep) {
         this.currentStep = currentStep;
     }

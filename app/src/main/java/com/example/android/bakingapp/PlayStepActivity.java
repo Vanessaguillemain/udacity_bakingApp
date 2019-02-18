@@ -25,7 +25,7 @@ public class PlayStepActivity extends AppCompatActivity {
         playStepFragment.setCurrentRecipe(recipe);
         playStepFragment.setCurrentStep(index);
         //TODO temporaire
-        playStepFragment.setmContext(this);
+        //playStepFragment.setmContext(this);
 
         // Add the fragment to its container using a FragmentManager and a Transaction
         FragmentManager fragmentManager = getSupportFragmentManager();
