@@ -7,4 +7,8 @@
 
     <dimen name="main_tv_error_text_size">22sp</dimen>
     <dimen name="main_tv_error_padding">16dp</dimen>
+
+    <!-- Widget -->
+    <dimen name="widget_margin">8dp</dimen>
+
 </resources>
