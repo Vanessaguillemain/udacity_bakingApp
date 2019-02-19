@@ -278,6 +278,12 @@ public class PlayStepFragment extends Fragment implements ExoPlayer.EventListene
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mExoPlayer.setPlayWhenReady(false);
+    }
+
     /**
      * Release the player when the activity is destroyed.
      */
@@ -308,12 +314,12 @@ public class PlayStepFragment extends Fragment implements ExoPlayer.EventListene
         if((playbackState == ExoPlayer.STATE_READY) && playWhenReady){
             // TODO (3): When ExoPlayer is playing, update the PlayBackState.
             Log.d(TAG, "onPlayerStateChanged: PLAYING");
-
+            Toast.makeText(mContext, "Play", Toast.LENGTH_SHORT).show();
             mBuilder.setState(PlaybackStateCompat.STATE_PLAYING, mExoPlayer.getCurrentPosition(), 1f);
         } else if((playbackState == ExoPlayer.STATE_READY)){
             // TODO (3): When ExoPlayer is paused, update the PlayBackState.
             Log.d(TAG, "onPlayerStateChanged: PAUSED");
-
+            Toast.makeText(mContext, "Pause", Toast.LENGTH_SHORT).show();
             mBuilder.setState(PlaybackStateCompat.STATE_PAUSED, mExoPlayer.getCurrentPosition(), 1f);
         }
         mMediaSession.setPlaybackState(mBuilder.build());
