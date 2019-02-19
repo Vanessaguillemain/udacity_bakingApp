@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.model.Recipe;
@@ -47,6 +48,8 @@ public class PlayStepFragment extends Fragment {
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
     private Context mContext;
+    private View mIncludedLayout;
+    private ImageView mImageView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment
@@ -71,8 +74,10 @@ public class PlayStepFragment extends Fragment {
         stepsSize = recipeSteps.size();
 
         // Initialize the player view.
-        View includedLayout = rootView.findViewById(R.id.include_player);
-        mPlayerView = includedLayout.findViewById(R.id.playerView);
+        mIncludedLayout = rootView.findViewById(R.id.include_player);
+        mPlayerView = mIncludedLayout.findViewById(R.id.playerView);
+        mImageView = mIncludedLayout.findViewById(R.id.playerViewImage);
+
         mContext = mPlayerView.getContext();
 
         if (currentRecipe != null) {
@@ -149,7 +154,7 @@ public class PlayStepFragment extends Fragment {
 
     private void loadNewStep() {
         mPlayerView.setPlayer(null);
-        setBackImage();
+        //setBackImage();
         releasePlayer();
         RecipeStep currentRecipeStep = recipeSteps.get(currentStep);
         mTextViewDescription.setText(currentRecipeStep.getDescription());
@@ -159,10 +164,16 @@ public class PlayStepFragment extends Fragment {
 
     private void setBackImage() {
         //TODO
-        /*
-        Bitmap image = BitmapFactory.decodeResource (getResources(), R.drawable.saucepan);
+        mImageView.setVisibility(View.VISIBLE);
+        mPlayerView.setVisibility(View.GONE);
+        /*Bitmap image = BitmapFactory.decodeResource (getResources(), R.drawable.saucepan);
         mPlayerView.setUseArtwork(true);
         mPlayerView.setDefaultArtwork(image);*/
+    }
+
+    private void removeBackImage() {
+        mImageView.setVisibility(View.GONE);
+        mPlayerView.setVisibility(View.VISIBLE);
     }
     private void launchVideo(RecipeStep currentRecipeStep) {
         String thumbnailURL = currentRecipeStep.getThumbnailURL();
@@ -172,6 +183,7 @@ public class PlayStepFragment extends Fragment {
             //TODO
             setBackImage();
         } else {
+            removeBackImage();
             if(!videoURL.isEmpty()) {
                 initializePlayer(videoURL);
             } else if(!thumbnailURL.isEmpty()) {
