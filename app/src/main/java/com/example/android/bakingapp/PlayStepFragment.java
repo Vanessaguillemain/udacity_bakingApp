@@ -1,6 +1,5 @@
 package com.example.android.bakingapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.model.Recipe;
@@ -75,13 +73,7 @@ public class PlayStepFragment extends Fragment {
         // Initialize the player view.
         View includedLayout = rootView.findViewById(R.id.include_player);
         mPlayerView = includedLayout.findViewById(R.id.playerView);
-        //mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
         mContext = mPlayerView.getContext();
-
-        //Tablet mode
-        if(rootView.findViewById(R.id.list_elements_container) != null) {
-
-        }
 
         if (currentRecipe != null) {
             recipeSteps = currentRecipe.getRecipeSteps();
@@ -94,22 +86,8 @@ public class PlayStepFragment extends Fragment {
                     mTextViewDescription = rootView.findViewById(R.id.tvDescription);
                     mTextViewDescription.setText(currentRecipeStep.getDescription());
                 }
-                String thumbnailURL = currentRecipeStep.getThumbnailURL();
-                String videoURL = currentRecipeStep.getVideoURL();
-
-                if(thumbnailURL.isEmpty() && videoURL.isEmpty()) {
-                    //TODO
-                    Bitmap image = BitmapFactory.decodeResource (getResources(), R.drawable.saucepan);
-                    mPlayerView.setDefaultArtwork(image);
-                } else {
-                    if(!videoURL.isEmpty()) {
-                        initializePlayer(videoURL);
-                    } else if(!thumbnailURL.isEmpty()) {
-                        initializePlayer(thumbnailURL);
-                    }
-                }
+                launchVideo(currentRecipeStep);
             }
-
 
             //There are buttons for phone mode
             if (rootView.findViewById(R.id.btnBefore) !=null) {
@@ -159,16 +137,47 @@ public class PlayStepFragment extends Fragment {
         }
     }
 
-
     private void loadStepBefore() {
         currentStep = currentStep -1;
-        mTextViewDescription.setText(recipeSteps.get(currentStep).getDescription());
-        setButtons();
+        loadNewStep();
     }
+
     private void loadStepAfter() {
         currentStep = currentStep +1;
-        mTextViewDescription.setText(recipeSteps.get(currentStep).getDescription());
+        loadNewStep();
+    }
+
+    private void loadNewStep() {
+        mPlayerView.setPlayer(null);
+        setBackImage();
+        releasePlayer();
+        RecipeStep currentRecipeStep = recipeSteps.get(currentStep);
+        mTextViewDescription.setText(currentRecipeStep.getDescription());
         setButtons();
+        launchVideo(currentRecipeStep);
+    }
+
+    private void setBackImage() {
+        //TODO
+        /*
+        Bitmap image = BitmapFactory.decodeResource (getResources(), R.drawable.saucepan);
+        mPlayerView.setUseArtwork(true);
+        mPlayerView.setDefaultArtwork(image);*/
+    }
+    private void launchVideo(RecipeStep currentRecipeStep) {
+        String thumbnailURL = currentRecipeStep.getThumbnailURL();
+        String videoURL = currentRecipeStep.getVideoURL();
+
+        if(thumbnailURL.isEmpty() && videoURL.isEmpty()) {
+            //TODO
+            setBackImage();
+        } else {
+            if(!videoURL.isEmpty()) {
+                initializePlayer(videoURL);
+            } else if(!thumbnailURL.isEmpty()) {
+                initializePlayer(thumbnailURL);
+            }
+        }
     }
 
     public void setCurrentRecipe(Recipe currentRecipe) {
