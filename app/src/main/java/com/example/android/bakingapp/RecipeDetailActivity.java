@@ -70,6 +70,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
                 // Create a new Fragment
                 PlayStepFragment playStepFragment = new PlayStepFragment();
                 playStepFragment.setCurrentRecipe(mRecipe);
+                //playStepFragment.setContext(this);//TODO
                 playStepFragment.setCurrentStep(mCurrentStep);
 
                 fragmentManager.beginTransaction()
@@ -120,6 +121,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
             // Create a new Fragment for replacing
             PlayStepFragment playStepFragment = new PlayStepFragment();
             playStepFragment.setCurrentRecipe(mRecipe);
+            //playStepFragment.setContext(this);//TODO
             playStepFragment.setCurrentStep(position);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.play_step_container, playStepFragment)

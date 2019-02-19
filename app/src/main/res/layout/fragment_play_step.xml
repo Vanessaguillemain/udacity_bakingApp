@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_margin="10dp"
     android:layout_height="match_parent">
 
-    <ImageView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/ivPlayer"
+
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/playerView"
         android:layout_width="match_parent"
-        android:background="@drawable/film"
-        android:layout_height="200dp">
-    </ImageView>
+        android:layout_height="220dp"
+        android:layout_margin="0dp"
+        />
 
     <TextView android:id="@+id/tvDescription"
         android:layout_width="match_parent"
