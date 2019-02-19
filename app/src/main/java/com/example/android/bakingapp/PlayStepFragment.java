@@ -1,29 +1,36 @@
 package com.example.android.bakingapp;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.RecipeStep;
 import com.example.android.bakingapp.utils.Utils;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -35,7 +42,7 @@ import java.util.List;
  * Created by vanessa on 17/02/2019.
  */
 
-public class PlayStepFragment extends Fragment {
+public class PlayStepFragment extends Fragment implements ExoPlayer.EventListener {
 
     private Recipe currentRecipe;
     private List<RecipeStep> recipeSteps;
@@ -45,11 +52,17 @@ public class PlayStepFragment extends Fragment {
     private Button mBtnAfter;
     private TextView mTextViewDescription;
 
+    //For ExoPlayer
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
     private Context mContext;
     private View mIncludedLayout;
     private ImageView mImageView;
+
+    //For mediaSession
+    private MediaSessionCompat mMediaSession;
+    private PlaybackStateCompat.Builder mBuilder;
+    private static final String TAG = PlayStepFragment.class.getSimpleName();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment
@@ -79,6 +92,8 @@ public class PlayStepFragment extends Fragment {
         mImageView = mIncludedLayout.findViewById(R.id.playerViewImage);
 
         mContext = mPlayerView.getContext();
+
+        initializeMediaSession(); //TODO here?
 
         if (currentRecipe != null) {
             recipeSteps = currentRecipe.getRecipeSteps();
@@ -113,11 +128,40 @@ public class PlayStepFragment extends Fragment {
                 });
             }
         }
-
         // Return the root view
         return rootView;
     }
 
+    private void initializeMediaSession() {
+        mMediaSession = new MediaSessionCompat(mContext, "tag_media_session");
+        mMediaSession.setFlags((MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS));
+        mMediaSession.setMediaButtonReceiver(null);
+        mBuilder = new PlaybackStateCompat.Builder()
+                .setActions(PlaybackStateCompat.ACTION_PLAY |
+                        PlaybackStateCompat.ACTION_PAUSE |
+                        PlaybackStateCompat.ACTION_PLAY_PAUSE |
+                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS);
+        mMediaSession.setPlaybackState(mBuilder.build());
+        mMediaSession.setCallback(new MySessionCallback());
+        mMediaSession.setActive(true);
+    }
+
+    private class MySessionCallback extends MediaSessionCompat.Callback {
+        @Override
+        public void onPlay() {
+            mExoPlayer.setPlayWhenReady(true);
+        }
+
+        @Override
+        public void onPause() {
+            mExoPlayer.setPlayWhenReady(false);
+        }
+
+        @Override
+        public void onSkipToPrevious() {
+            mExoPlayer.seekTo(0);
+        }
+    }
 
     /**
      * Initialize ExoPlayer.
@@ -130,6 +174,8 @@ public class PlayStepFragment extends Fragment {
             LoadControl loadControl = new DefaultLoadControl();
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);//TODO
             mPlayerView.setPlayer(mExoPlayer);
+            mExoPlayer.addListener(this);
+
             // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(mContext, "BakingApp");
             Uri mediaUri = Uri.parse(mediaString);
@@ -239,6 +285,47 @@ public class PlayStepFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         releasePlayer();
+        mMediaSession.setActive(false);
     }
 
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest) {
+
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+    }
+
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        if((playbackState == ExoPlayer.STATE_READY) && playWhenReady){
+            // TODO (3): When ExoPlayer is playing, update the PlayBackState.
+            Log.d(TAG, "onPlayerStateChanged: PLAYING");
+
+            mBuilder.setState(PlaybackStateCompat.STATE_PLAYING, mExoPlayer.getCurrentPosition(), 1f);
+        } else if((playbackState == ExoPlayer.STATE_READY)){
+            // TODO (3): When ExoPlayer is paused, update the PlayBackState.
+            Log.d(TAG, "onPlayerStateChanged: PAUSED");
+
+            mBuilder.setState(PlaybackStateCompat.STATE_PAUSED, mExoPlayer.getCurrentPosition(), 1f);
+        }
+        mMediaSession.setPlaybackState(mBuilder.build());
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+
+    }
+
+    @Override
+    public void onPositionDiscontinuity() {
+
+    }
 }
