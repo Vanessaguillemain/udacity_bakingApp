@@ -2,6 +2,7 @@ package com.example.android.bakingapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -72,29 +73,48 @@ public class PlayStepFragment extends Fragment {
         stepsSize = recipeSteps.size();
 
         // Initialize the player view.
-        //View includedLayout = rootView.findViewById(R.id.include_player);
-        //mPlayerView = includedLayout.findViewById(R.id.playerView);
-
-        mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
+        View includedLayout = rootView.findViewById(R.id.include_player);
+        mPlayerView = includedLayout.findViewById(R.id.playerView);
+        //mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
         mContext = mPlayerView.getContext();
 
-        //We are in Portrait mode
-        if(rootView.findViewById(R.id.tvDescription) != null) {
-            mTextViewDescription = rootView.findViewById(R.id.tvDescription);
-            if (currentRecipe != null) {
-                recipeSteps = currentRecipe.getRecipeSteps();
-                stepsSize = recipeSteps.size();
-                if (currentStep >= 0) {
-                    mTextViewDescription.setText(recipeSteps.get(currentStep).getDescription());
+        //Tablet mode
+        if(rootView.findViewById(R.id.list_elements_container) != null) {
+
+        }
+
+        if (currentRecipe != null) {
+            recipeSteps = currentRecipe.getRecipeSteps();
+            stepsSize = recipeSteps.size();
+
+            if (currentStep >= 0) {
+                RecipeStep currentRecipeStep = recipeSteps.get(currentStep);
+                if(rootView.findViewById(R.id.tvDescription) != null) {
+                    //We are in Portrait mode
+                    mTextViewDescription = rootView.findViewById(R.id.tvDescription);
+                    mTextViewDescription.setText(currentRecipeStep.getDescription());
+                }
+                String thumbnailURL = currentRecipeStep.getThumbnailURL();
+                String videoURL = currentRecipeStep.getVideoURL();
+
+                if(thumbnailURL.isEmpty() && videoURL.isEmpty()) {
+                    //TODO
+                    Bitmap image = BitmapFactory.decodeResource (getResources(), R.drawable.saucepan);
+                    mPlayerView.setDefaultArtwork(image);
+                } else {
+                    if(!videoURL.isEmpty()) {
+                        initializePlayer(videoURL);
+                    } else if(!thumbnailURL.isEmpty()) {
+                        initializePlayer(thumbnailURL);
+                    }
                 }
             }
+
 
             //There are buttons for phone mode
             if (rootView.findViewById(R.id.btnBefore) !=null) {
                 mBtnBefore = rootView.findViewById(R.id.btnBefore);
                 mBtnAfter = rootView.findViewById(R.id.btnAfter);
-                //initButtonsState();
-                //if (buttonsActivated) {
                 setButtons();
                 mBtnBefore.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -111,21 +131,6 @@ public class PlayStepFragment extends Fragment {
             }
         }
 
-        String thumbnailURL = currentRecipe.getRecipeSteps().get(currentStep).getThumbnailURL();
-        String videolURL = currentRecipe.getRecipeSteps().get(currentStep).getVideoURL();
-
-        if(thumbnailURL.isEmpty() && videolURL.isEmpty()) {
-            // Load the question mark as the background image until the user answers the question.
-            mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
-                    (getResources(), R.drawable.question_mark));
-        } else {
-            if(!videolURL.isEmpty()) {
-                initializePlayer(videolURL);
-            } else if(!thumbnailURL.isEmpty()) {
-                initializePlayer(thumbnailURL);
-            }
-        }
-
         // Return the root view
         return rootView;
     }
@@ -137,7 +142,6 @@ public class PlayStepFragment extends Fragment {
      */
     private void initializePlayer(String mediaString) {
         if (mExoPlayer == null) {
-
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
@@ -145,8 +149,6 @@ public class PlayStepFragment extends Fragment {
             mPlayerView.setPlayer(mExoPlayer);
             // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(mContext, "BakingApp");
-
-            //Uri mediaUri = Uri.parse("https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffda20_7-add-cream-mix-creampie/7-add-cream-mix-creampie.mp4");
             Uri mediaUri = Uri.parse(mediaString);
 
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
@@ -157,25 +159,6 @@ public class PlayStepFragment extends Fragment {
         }
     }
 
-    /**
-     * Release ExoPlayer.
-     */
-    private void releasePlayer() {
-        if(mExoPlayer != null) {
-            mExoPlayer.stop();
-            mExoPlayer.release();
-            mExoPlayer = null;
-        }
-    }
-
-    /**
-     * Release the player when the activity is destroyed.
-     */
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        releasePlayer();
-    }
 
     private void loadStepBefore() {
         currentStep = currentStep -1;
@@ -216,6 +199,25 @@ public class PlayStepFragment extends Fragment {
     public void onSaveInstanceState(Bundle currentState) {
         currentState.putParcelable(Utils.BUNDLE_KEY_RECIPE, currentRecipe);
         currentState.putInt(Utils.BUNDLE_KEY_STEP_INDEX, currentStep);
+    }
+    /**
+     * Release ExoPlayer.
+     */
+    private void releasePlayer() {
+        if(mExoPlayer != null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
+    }
+
+    /**
+     * Release the player when the activity is destroyed.
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
     }
 
 }
